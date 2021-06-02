@@ -73,9 +73,18 @@ router.delete("/:id", async (req, res) => {
     // 2nd => Remove that document from mongodb
     const id = req.params.id;
 
-    const deletedPost = await Post.deleteOne({ _id: id });
-    res.send(deletedPost);
+    // we can check if the post exists first...
+    // db.collectionName.findOne({_id: id})
+    const post = await Post.findOne({ _id: id });
+
+    if (post) {
+      const deletedPost = await Post.deleteOne({ _id: id });
+      res.send(deletedPost);
+    } else {
+      res.status(404).send("Post not found.");
+    }
   } catch (e) {
+    console.log(e);
     return res.send("Error", 400);
   }
 });
