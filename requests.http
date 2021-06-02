@@ -8,7 +8,7 @@ GET {{baseUrl}}/api/posts
 
 ###
 
-GET {{baseUrl}}/api/posts/60b6ee389ee5a4331aec3555
+GET {{baseUrl}}/api/posts/60b6f7b7dea8e83a49678e8f
 
 ###
 
@@ -39,6 +39,6 @@ Content-Type: application/json
 
 ###
 
-DELETE {{baseUrl}}/api/posts/asdf
+DELETE {{baseUrl}}/api/posts/60b6f7b7dea8e83a49678e8f
 
 
