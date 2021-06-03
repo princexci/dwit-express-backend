@@ -3,10 +3,11 @@
 
 // React -> Dashboard.
 // IN dashboard
-// Products add, remove, edit, delete
-// Categories add, remove, edit, delete
-// Order reviews...
-// Authentication...
+// Categories add, remove, edit, delete -> Done
+// Products add, remove, edit, delete -> In progress
+// name, description, image: url.., price, categoryId, createdAt, published
+// Order reviews...-> Pending
+// Authentication... -> Pending
 
 const express = require("express");
 const dotenv = require("dotenv");
