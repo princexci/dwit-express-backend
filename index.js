@@ -50,6 +50,6 @@ app.use("/api/categories", categoryRoutes);
 
 // http://localhost:3000
 
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Node.js Server is running on port 5000");
 });

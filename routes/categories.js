@@ -5,6 +5,7 @@ const { Category, validationSchema } = require("../model/Category");
 
 // Import middleware
 const validateRequest = require("./middlewares/validateRequest");
+const validateMongoId = require("./middlewares/validateMongoId");
 
 router.get("/", async (req, res) => {
   const allCategories = await Category.find();
@@ -35,31 +36,35 @@ router.post("/", validateRequest(validationSchema), async (req, res) => {
   }
 });
 
-router.put("/:id", validateRequest(validationSchema), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name } = req.body;
+router.put(
+  "/:id",
+  [validateRequest(validationSchema), validateMongoId],
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { name } = req.body;
 
-    const updatedData = await Category.findByIdAndUpdate(
-      id,
-      { name },
-      { new: true }
-    );
-    if (updatedData) {
-      res.send(updatedData);
-    } else {
-      res.status(404).send("Category not found.");
+      const updatedData = await Category.findByIdAndUpdate(
+        id,
+        { name },
+        { new: true }
+      );
+      if (updatedData) {
+        res.send(updatedData);
+      } else {
+        res.status(404).send("Category not found.");
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Error..");
     }
-  } catch (e) {
-    console.log(e);
-    res.status(500).send("Error..");
   }
-});
+);
 
 // name ???
 // Id
 // Do we need validation schema????
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateMongoId, async (req, res) => {
   try {
     const { id } = req.params;
     const deletedData = await Category.deleteOne({ _id: id });
