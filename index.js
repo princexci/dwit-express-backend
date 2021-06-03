@@ -1,18 +1,34 @@
+// Inventory management system...
+// E-commerce app...React Native....
+
+// React -> Dashboard.
+// IN dashboard
+// Products add, remove, edit, delete
+// Categories add, remove, edit, delete
+// Order reviews...
+// Authentication...
+
 const express = require("express");
+const dotenv = require("dotenv");
 const app = express();
 const mongoose = require("mongoose");
+
+// Load env configuration
+dotenv.config();
+
 // Makes the app able to recognize json data from request body..
 app.use(express.json());
 
-// Connect to mongodb database
+// Connect to mongodb database with environment connection
 mongoose.connect(
-  "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false",
-  { useNewUrlParser: true, useUnifiedTopology: true },
+  process.env.DB_CONNECT,
+  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
   () => console.log("Connected to DB")
 );
 
-// Post routes
+// Import route modules
 const postRoutes = require("./routes/posts");
+const categoryRoutes = require("./routes/categories");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -30,6 +46,7 @@ app.get("/", (req, res) => {
 // const {id} = useParams()
 
 app.use("/api/posts", postRoutes);
+app.use("/api/categories", categoryRoutes);
 
 // http://localhost:3000
 
