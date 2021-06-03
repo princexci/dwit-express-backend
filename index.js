@@ -12,6 +12,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const app = express();
 const mongoose = require("mongoose");
+const PORT = 5000;
 
 // Load env configuration
 dotenv.config();
@@ -50,6 +51,6 @@ app.use("/api/categories", categoryRoutes);
 
 // http://localhost:3000
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || PORT, () => {
   console.log("Node.js Server is running on port 5000");
 });
