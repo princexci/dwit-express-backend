@@ -31,6 +31,7 @@ mongoose.connect(
 // Import route modules
 const postRoutes = require("./routes/posts");
 const categoryRoutes = require("./routes/categories");
+const productRoutes = require("./routes/products");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -49,6 +50,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/posts", postRoutes);
 app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
 
 // http://localhost:3000
 
