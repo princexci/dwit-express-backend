@@ -4,10 +4,10 @@
 // React -> Dashboard.
 // IN dashboard
 // Categories add, remove, edit, delete -> Done
-// Products add, remove, edit, delete -> In progress
+// Products add, remove, edit, delete -> Done
 // name, description, image: url.., price, categoryId, createdAt, published
+// Authentication... -> In Progress
 // Order reviews...-> Pending
-// Authentication... -> Pending
 
 const express = require("express");
 const dotenv = require("dotenv");
@@ -32,6 +32,7 @@ mongoose.connect(
 const postRoutes = require("./routes/posts");
 const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
+const authRoutes = require("./routes/auth");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -44,13 +45,19 @@ app.get("/", (req, res) => {
   res.send("Welcome to Node.js Home page.");
 });
 
+// Import middlewares
+const verifyToken = require("./routes/middlewares/verifyToken");
+
 // URL params..
 // REACT ROUTER -> <Route path="/blog/1" /> // params..
 // const {id} = useParams()
 
-app.use("/api/posts", postRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/products", productRoutes);
+// app.use("/api/posts", postRoutes);
+// Protected routes...
+app.use("/api/categories", verifyToken, categoryRoutes);
+app.use("/api/products", verifyToken, productRoutes);
+
+app.use("/api/auth", authRoutes);
 
 // http://localhost:3000
 

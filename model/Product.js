@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const yup = require("yup");
 
+const ObjectId = mongoose.Types.ObjectId;
+
 // name, description, image: url.., price, categoryId, createdAt, published
 const productSchema = mongoose.Schema({
   name: {
@@ -17,8 +19,11 @@ const productSchema = mongoose.Schema({
     required: true,
     max: 1024,
   },
+  // SQL -> primary foreign keys....
+  // Categories -> collection _id....
+  // MONGODB -> ID object type??
   categoryId: {
-    type: String,
+    type: ObjectId,
     required: true,
   },
   price: {

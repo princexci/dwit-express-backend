@@ -9,9 +9,34 @@ const validateRequest = require("./middlewares/validateRequest");
 // api/products GET...
 router.get("/", async (req, res) => {
   try {
-    // What should be done?
-    // We need all the products in our database...
-    const allProducts = await Product.find();
+    // do it in query
+    const allProducts = await Product.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $addFields: {
+          category: {
+            $first: "$category",
+          },
+        },
+      },
+    ]);
+
+    // allProducts map....get the first element from the array
+    // const productsWithCategory = allProducts.map((product) => {
+    //   return {
+    //     ...product,
+    //     category: product.category[0],
+    //   };
+    // });
+
+    // res.send(productsWithCategory);
     res.send(allProducts);
   } catch (e) {
     console.log(e);
@@ -25,9 +50,22 @@ router.post("/", validateRequest(validationSchema), async (req, res) => {
     // To avoid adding duplicate products ... exercise
     // Don't let the user add products that already exists..
     // name..
-    const newProduct = new Product(req.body);
-    const savedProduct = await newProduct.save();
-    res.send(savedProduct);
+
+    const { name } = req.body;
+
+    const foundData = await Product.findOne({ name });
+
+    if (!foundData) {
+      const newProduct = new Product(req.body);
+      const savedProduct = await newProduct.save();
+      res.send(savedProduct);
+    } else {
+      res
+        .status(409)
+        .send(
+          "Product with the same name exists. Please change the product's name"
+        );
+    }
   } catch (e) {
     console.log(e);
     res.status(500).send("Error");
