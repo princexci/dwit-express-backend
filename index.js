@@ -15,6 +15,8 @@ const app = express();
 const mongoose = require("mongoose");
 const PORT = 5000;
 
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 // Load env configuration
 dotenv.config();
 
@@ -29,7 +31,6 @@ mongoose.connect(
 );
 
 // Import route modules
-const postRoutes = require("./routes/posts");
 const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
 const authRoutes = require("./routes/auth");
