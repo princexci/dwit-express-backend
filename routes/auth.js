@@ -119,7 +119,7 @@ router.post("/refresh", async (req, res) => {
 
   const foundRefreshTokenInDb = await Auth.findOne({ refreshToken });
 
-  if (!foundRefreshTokenInDb) return res.send(403); // Send forbidden..
+  if (!foundRefreshTokenInDb) return res.send(401); // Send forbidden..
 
   // If refresh token exists in db---procced to generate new access token...
 
@@ -158,7 +158,7 @@ router.get("/user", verifyToken, async (req, res) => {
   }
 });
 
-router.get("/logout", async (req, res) => {
+router.post("/logout", async (req, res) => {
   try {
     // We have refresh token in cookie
     const { refreshToken } = req.cookies;
@@ -170,7 +170,8 @@ router.get("/logout", async (req, res) => {
     await Auth.deleteOne({
       refreshToken,
     });
-    res.sendStatus(204); // 204 - No content...action complete..
+
+    res.status(202).clearCookie("refreshToken");
   } catch (error) {
     res.sendStatus(500);
   }
