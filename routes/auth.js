@@ -170,8 +170,7 @@ router.post("/logout", async (req, res) => {
     await Auth.deleteOne({
       refreshToken,
     });
-
-    res.status(202).clearCookie("refreshToken");
+    res.clearCookie("refreshToken", { options: {} });
   } catch (error) {
     res.sendStatus(500);
   }

@@ -15,6 +15,15 @@ const app = express();
 const mongoose = require("mongoose");
 const PORT = 5000;
 
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Frontend..
+    credentials: true,
+  })
+); // Access - * -> insecure....
+
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 // Load env configuration

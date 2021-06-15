@@ -15,7 +15,7 @@ const verifyToken = (req, res, next) => {
     // Decode the access token...
     jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET, (err, user) => {
       if (err) {
-        return res.sendStatus(403);
+        return res.sendStatus(403); // token expired.
       }
 
       // If decoded / verified successfully...
@@ -23,7 +23,7 @@ const verifyToken = (req, res, next) => {
       next();
     });
   } else {
-    res.sendStatus(401);
+    res.sendStatus(401); // unauthorized..
   }
 };
 
