@@ -160,16 +160,18 @@ router.post("/logout", async (req, res) => {
   try {
     // We have refresh token in cookie
     const { refreshToken } = req.cookies;
-    console.log(refreshToken);
+
     // If user hasn't sent a refreshtoken from cookie....
     if (!refreshToken) return res.sendStatus(400);
-    // let token = await Auth.findOne({ refreshToken });
-    // Logout
+
+    // Find the sent refresh token and
     await Auth.findOneAndDelete({
       refreshToken,
     });
+
+    // Clear the cookie after token deletion
+    res.clearCookie("refreshToken", { options: {} });
     res.send(204);
-    // res.clearCookie("refreshToken", { options: {} });
   } catch (error) {
     res.sendStatus(500);
   }
