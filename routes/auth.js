@@ -91,7 +91,7 @@ router.post("/login", async (req, res) => {
 
     // Create a token that the user can use....in any platform java, react, react native, python...
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, {
-      expiresIn: "10s",
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     });
     // Create a token that the user can use....in any platform java, react, react native, python...
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET);
@@ -131,7 +131,7 @@ router.post("/refresh", async (req, res) => {
     }
     const { id } = user;
     const accessToken = jwt.sign({ id }, process.env.JWT_ACCESS_SECRET, {
-      expiresIn: "10s",
+      expiresIn: process.env.JWT_EXPIRE_TIME,
     });
     res.json({ accessToken });
   });

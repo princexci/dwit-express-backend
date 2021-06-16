@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const ObjectId = require("mongoose").Types.ObjectId;
 // Import model and validation schema
 const { Product, validationSchema } = require("../model/Product");
 
@@ -106,6 +107,21 @@ router.delete("/:id", validateMongoId, async (req, res) => {
     console.log(e);
     res.status(500).send("Error");
   }
+});
+
+// Get all products from a certain category...
+// hint: You should convert the provided id to Mongo DB's Object ID...
+router.get("/category/:id", async (req, res) => {
+  try {
+    // Convert the id to Mongo Db's object id.
+    const categoryId = new ObjectId(req.params.id);
+
+    // Query db...
+    const products = await Product.find({ categoryId });
+
+    // Send back results
+    res.json(products);
+  } catch (error) {}
 });
 
 module.exports = router;
