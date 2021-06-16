@@ -19,7 +19,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Frontend..
+    origin: ["http://localhost:3000", "http://localhost:3001"], // Frontend..
     credentials: true,
   })
 ); // Access - * -> insecure....

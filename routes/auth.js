@@ -67,7 +67,7 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email });
 
     // If user does not exist
-    if (!user) return res.send("Email / Password does not exist.");
+    if (!user) return res.status(404).send("Email / Password does not exist.");
 
     // At this point we have,
     // user = {
@@ -97,7 +97,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET);
 
     // Save refresh token in database....
-    const savedRefreshToken = new Auth({ refreshToken }).save();
+    const savedRefreshToken = await new Auth({ refreshToken }).save();
 
     if (!savedRefreshToken) res.sendStatus(500);
 
@@ -129,21 +129,19 @@ router.post("/refresh", async (req, res) => {
       console.log(err);
       return res.sendStatus(403);
     }
-    const { name, address, contact, email } = user;
-    const accessToken = jwt.sign(
-      { name, address, contact, email },
-      process.env.JWT_ACCESS_SECRET,
-      {
-        expiresIn: "10s",
-      }
-    );
+    const { id } = user;
+    const accessToken = jwt.sign({ id }, process.env.JWT_ACCESS_SECRET, {
+      expiresIn: "10s",
+    });
     res.json({ accessToken });
   });
 });
 
 // Get the currently logged in user req.user = {decoded data...}
+// $axios.get('/auth/user') -> after login
 router.get("/user", verifyToken, async (req, res) => {
   try {
+    console.log(req.user);
     const { id } = req.user;
     const user = await User.findById(id);
     console.log(user);
@@ -162,15 +160,16 @@ router.post("/logout", async (req, res) => {
   try {
     // We have refresh token in cookie
     const { refreshToken } = req.cookies;
-
+    console.log(refreshToken);
     // If user hasn't sent a refreshtoken from cookie....
     if (!refreshToken) return res.sendStatus(400);
-
+    // let token = await Auth.findOne({ refreshToken });
     // Logout
-    await Auth.deleteOne({
+    await Auth.findOneAndDelete({
       refreshToken,
     });
-    res.clearCookie("refreshToken", { options: {} });
+    res.send(204);
+    // res.clearCookie("refreshToken", { options: {} });
   } catch (error) {
     res.sendStatus(500);
   }
