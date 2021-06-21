@@ -43,6 +43,7 @@ mongoose.connect(
 const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
 const authRoutes = require("./routes/auth");
+const phoneRoutes = require("./routes/phone-auth");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -68,6 +69,7 @@ app.use("/api/categories", verifyToken, categoryRoutes);
 app.use("/api/products", verifyToken, productRoutes);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/ph-auth", phoneRoutes);
 
 // http://localhost:3000
 
