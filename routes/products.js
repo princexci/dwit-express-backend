@@ -45,6 +45,19 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Get individual product....
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    // do it in query
+    const product = await Product.findById(id);
+    res.json(product);
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Error");
+  }
+});
+
 router.post("/", validateRequest(validationSchema), async (req, res) => {
   try {
     // Backend - rule...
