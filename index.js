@@ -9,6 +9,9 @@
 // Authentication... -> In Progress
 // Order reviews...-> Pending
 
+// Orders -> model ... api---  POST /orders
+// user_id, items, address, contact...
+
 const express = require("express");
 const dotenv = require("dotenv");
 const app = express();
@@ -44,6 +47,7 @@ const categoryRoutes = require("./routes/categories");
 const productRoutes = require("./routes/products");
 const authRoutes = require("./routes/auth");
 const phoneRoutes = require("./routes/phone-auth");
+const stripeRoutes = require("./routes/stripe");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -70,6 +74,7 @@ app.use("/api/products", verifyToken, productRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ph-auth", phoneRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 // http://localhost:3000
 
