@@ -40,6 +40,8 @@ const productSchema = mongoose.Schema({
   },
 });
 
+productSchema.index({ name: "text", description: "text" });
+
 // Create a validation schema
 const validationSchema = yup.object({
   name: yup.string().min(5).max(255).required(),

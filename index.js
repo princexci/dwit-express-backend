@@ -38,7 +38,12 @@ app.use(express.json());
 // Connect to mongodb database with environment connection
 mongoose.connect(
   process.env.DB_CONNECT,
-  { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  },
   () => console.log("Connected to DB")
 );
 
@@ -48,6 +53,7 @@ const productRoutes = require("./routes/products");
 const authRoutes = require("./routes/auth");
 const phoneRoutes = require("./routes/phone-auth");
 const stripeRoutes = require("./routes/stripe");
+const orderRoutes = require("./routes/orders");
 
 // HTTP Requests
 // GET -> To get some data -> when we want to read data from the server
@@ -71,10 +77,11 @@ const verifyToken = require("./routes/middlewares/verifyToken");
 // Protected routes...
 app.use("/api/categories", verifyToken, categoryRoutes);
 app.use("/api/products", verifyToken, productRoutes);
+app.use("/api/orders", verifyToken, orderRoutes);
+app.use("/api/stripe", stripeRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ph-auth", phoneRoutes);
-app.use("/api/stripe", stripeRoutes);
 
 // http://localhost:3000
 

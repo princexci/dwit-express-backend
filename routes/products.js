@@ -7,6 +7,21 @@ const { Product, validationSchema } = require("../model/Product");
 const validateMongoId = require("./middlewares/validateMongoId");
 const validateRequest = require("./middlewares/validateRequest");
 
+router.get("/search/:query", async (req, res) => {
+  const { query } = req.params;
+  try {
+    const searchResults = await Product.find({ $text: { $search: query } });
+    res.json(searchResults);
+
+    // For custom search...
+    // const allProducts = await Product.aggregate
+    // allProducts.filter(...) -> indexOf...
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
+
 // api/products GET...
 router.get("/", async (req, res) => {
   try {

@@ -82,6 +82,7 @@ router.get("/user", verifyToken, async (req, res) => {
 
     // const user = await User.findOne({ _id: ObjectId(id) });
     res.json({
+      id,
       name: user.name,
       email: user.email,
     });
