@@ -3,9 +3,11 @@ const multer = require("multer");
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // TODO -> what is null???
+    // cb = (error, destination) => ()
+    cb(null, "uploads/"); // TODO -> null -> 1st param -> error : boolean...
   },
   filename: (req, file, cb) => {
+    // cb = (error, filename) => ()
     let extension = path.extname(file.originalname);
     cb(null, Date.now() + extension);
   },
@@ -14,6 +16,7 @@ let storage = multer.diskStorage({
 let upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
+    // cb = (error, acceptFile) => ()
     if (
       file.mimetype == "image/png" ||
       file.mimetype == "image/jpg" ||
