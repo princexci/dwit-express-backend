@@ -32,6 +32,14 @@ router.post("/", validateRequest(validationSchema), async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  try {
+    const allOrders = await Order.find();
+    res.json(allOrders);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;

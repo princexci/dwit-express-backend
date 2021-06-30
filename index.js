@@ -77,7 +77,7 @@ const verifyToken = require("./routes/middlewares/verifyToken");
 // Protected routes...
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/orders", verifyToken, orderRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/stripe", stripeRoutes);
 
 app.use("/api/auth", authRoutes);
