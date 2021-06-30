@@ -15,7 +15,7 @@ const productSchema = mongoose.Schema({
     type: String,
   },
   image: {
-    type: String,
+    type: String, // uploads/.....jpeg
     required: true,
     max: 1024,
   },
@@ -46,7 +46,6 @@ productSchema.index({ name: "text", description: "text" });
 const validationSchema = yup.object({
   name: yup.string().min(5).max(255).required(),
   description: yup.string(),
-  image: yup.string().max(1024).required(),
   categoryId: yup.string().required(),
   price: yup.number().required(),
   createdAt: yup.date(),

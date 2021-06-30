@@ -6,6 +6,7 @@ const { Product, validationSchema } = require("../model/Product");
 // Import middlewares
 const validateMongoId = require("./middlewares/validateMongoId");
 const validateRequest = require("./middlewares/validateRequest");
+const upload = require("./middlewares/upload");
 
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
@@ -19,6 +20,15 @@ router.get("/search/:query", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
+  }
+});
+
+// Test file upload
+router.post("/upload-image", upload.single("image"), async (req, res) => {
+  if (req.file) {
+    res.send("Image saved: " + req.file.path);
+  } else {
+    res.sendStatus(400);
   }
 });
 
@@ -89,40 +99,55 @@ router.get("/category/:id", async (req, res) => {
   }
 });
 
-router.post("/", validateRequest(validationSchema), async (req, res) => {
-  try {
-    // Backend - rule...
-    // To avoid adding duplicate products ... exercise
-    // Don't let the user add products that already exists..
-    // name..
+router.post(
+  "/",
+  [upload.single("image"), validateRequest(validationSchema)],
+  async (req, res) => {
+    try {
+      // Backend - rule...
+      // To avoid adding duplicate products ... exercise
+      // Don't let the user add products that already exists..
+      // name..
 
-    const { name } = req.body;
+      const { name } = req.body;
 
-    const foundData = await Product.findOne({ name });
+      const foundData = await Product.findOne({ name });
 
-    if (!foundData) {
-      const newProduct = new Product(req.body);
-      const savedProduct = await newProduct.save();
-      res.send(savedProduct);
-    } else {
-      res
-        .status(409)
-        .send(
-          "Product with the same name exists. Please change the product's name"
-        );
+      if (!foundData) {
+        const newProduct = new Product(req.body);
+
+        if (req.file) {
+          newProduct.image = req.file.path;
+          const savedProduct = await newProduct.save();
+          res.send(savedProduct);
+        } else {
+          res.sendStatus(400);
+        }
+      } else {
+        res
+          .status(409)
+          .send(
+            "Product with the same name exists. Please change the product's name"
+          );
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).send("Error");
     }
-  } catch (e) {
-    console.log(e);
-    res.status(500).send("Error");
   }
-});
+);
 
 router.put(
   "/:id",
-  [validateRequest(validationSchema), validateMongoId],
+  [upload.single("image"), validateRequest(validationSchema), validateMongoId],
   async (req, res) => {
     try {
       const { id } = req.params;
+
+      if (req.file) {
+        req.body.image = req.file.path;
+      }
+
       const updatedData = await Product.findByIdAndUpdate(id, req.body, {
         new: true,
       });

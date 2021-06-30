@@ -106,6 +106,7 @@ router.post("/logout", async (req, res) => {
     });
     res.send(204);
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 });

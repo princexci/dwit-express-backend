@@ -75,13 +75,15 @@ const verifyToken = require("./routes/middlewares/verifyToken");
 
 // app.use("/api/posts", postRoutes);
 // Protected routes...
-app.use("/api/categories", verifyToken, categoryRoutes);
-app.use("/api/products", verifyToken, productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/products", productRoutes);
 app.use("/api/orders", verifyToken, orderRoutes);
 app.use("/api/stripe", stripeRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/ph-auth", phoneRoutes);
+
+app.use("/uploads", express.static("uploads"));
 
 // http://localhost:3000
 
