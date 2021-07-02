@@ -15,7 +15,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const { User, validationSchema } = require("../model/User");
-const Auth = require("../model/Auth");
+const Auth = require("../model/Auth"); // store refreshTokens....
 const validateRequest = require("./middlewares/validateRequest");
 
 const verifyToken = require("./middlewares/verifyToken");
@@ -102,7 +102,7 @@ router.post("/login", async (req, res) => {
     if (!savedRefreshToken) res.sendStatus(500);
 
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
+      httpOnly: true, // Cannot be accessed from JS, eliminates the risk of csrf and xss attacks....
       path: "/", // path
       // secure: true // https://...// Enable in production..
     });

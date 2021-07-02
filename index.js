@@ -18,19 +18,26 @@ const app = express();
 const mongoose = require("mongoose");
 const PORT = 5000;
 
+// Load env configuration
+dotenv.config();
+
 const cors = require("cors");
 
+// localhost:3000 127.0.0.1:3000
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"], // Frontend..
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "http://localhost:3001",
+    ], // Frontend..
     credentials: true,
   })
 ); // Access - * -> insecure....
 
+// Required to send / retrieve cookies in from request / response...
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
-// Load env configuration
-dotenv.config();
 
 // Makes the app able to recognize json data from request body..
 app.use(express.json());
@@ -68,6 +75,7 @@ app.get("/", (req, res) => {
 
 // Import middlewares
 const verifyToken = require("./routes/middlewares/verifyToken");
+const { verify } = require("jsonwebtoken");
 
 // URL params..
 // REACT ROUTER -> <Route path="/blog/1" /> // params..
@@ -75,7 +83,7 @@ const verifyToken = require("./routes/middlewares/verifyToken");
 
 // app.use("/api/posts", postRoutes);
 // Protected routes...
-app.use("/api/categories", categoryRoutes);
+app.use("/api/categories", verifyToken, categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/stripe", stripeRoutes);
