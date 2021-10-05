@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
 const validationSchema = yup.object({
   name: yup.string().required(),
   email: yup.string().email().max(255).min(6).required(),
+  mobile: yup.string().max(10).required(),
   password: yup.string().required().max(1024),
   date: yup.date(),
 });
