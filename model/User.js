@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
     max: 255,
     min: 6,
   },
+  mobile: {
+    type: String,
+    required: true,
+    max: 10,
+  },
   password: {
     type: String,
     required: true,

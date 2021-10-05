@@ -27,10 +27,17 @@ router.post(
   "/register",
   validateRequest(validationSchema),
   async (req, res) => {
+    console.log("register");
     // At this point, we have all the data we need.
     try {
       // Get registration data from body
-      const { name, email, password } = req.body;
+      const { name, email, mobile, password, confirmPassword } = req.body;
+
+      if (password !== confirmPassword) {
+        return res
+          .status(400)
+          .send("Password & Confirm Password does not match");
+      }
 
       // Check if user exists...
       const userExist = await User.findOne({ email });
@@ -47,6 +54,7 @@ router.post(
       const newUser = new User({
         name,
         email,
+        mobile,
         password: hashedPassword,
       });
       const savedUser = await newUser.save();
