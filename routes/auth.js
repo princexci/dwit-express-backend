@@ -27,7 +27,6 @@ router.post(
   "/register",
   validateRequest(validationSchema),
   async (req, res) => {
-    console.log("register");
     // At this point, we have all the data we need.
     try {
       // Get registration data from body
