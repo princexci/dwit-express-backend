@@ -85,6 +85,7 @@ router.get("/user", verifyToken, async (req, res) => {
       id,
       name: user.name,
       email: user.email,
+      mobile: user.mobile,
     });
   } catch (error) {
     console.log(error);
