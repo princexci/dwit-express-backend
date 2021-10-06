@@ -85,7 +85,7 @@ const { verify } = require("jsonwebtoken");
 // app.use("/api/posts", postRoutes);
 // Protected routes...
 app.use("/api/categories", verifyToken, categoryRoutes);
-app.use("/api/products", productRoutes);
+app.use("/api/products", verifyToken, productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/stripe", stripeRoutes);
 
