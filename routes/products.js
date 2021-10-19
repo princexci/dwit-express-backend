@@ -89,10 +89,29 @@ router.get("/category/:id", async (req, res) => {
   try {
     const id = req.params.id;
     // do it in query
-    const product = await Product.find({
-      categoryId: id,
-    });
-    res.json(product);
+    const productWithCategory = await Product.aggregate([
+      {
+        $match: {
+          categoryId: ObjectId(id),
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $addFields: {
+          category: {
+            $first: "$category",
+          },
+        },
+      },
+    ]);
+    res.json(productWithCategory);
   } catch (e) {
     console.log(e);
     res.status(500).send("Error");
