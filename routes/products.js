@@ -18,7 +18,7 @@ router.get("/search/:query", async (req, res) => {
       searchResults.map((product) => {
         const category = categories.find((c) => c.id == product.categoryId);
         return {
-          product,
+          ...product._doc,
           category,
         };
       })
