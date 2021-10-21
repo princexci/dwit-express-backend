@@ -2,6 +2,7 @@ const router = require("express").Router();
 const ObjectId = require("mongoose").Types.ObjectId;
 // Import model and validation schema
 const { Product, validationSchema } = require("../model/Product");
+const { Category } = require("../model/Category");
 
 // Import middlewares
 const validateMongoId = require("./middlewares/validateMongoId");
@@ -11,30 +12,17 @@ const upload = require("./middlewares/upload");
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
   try {
-    // const searchResults = await Product.find({ $text: { $search: query } });
-    const searchResults = await Product.aggregate([
-      {
-        $text: {
-          $search: query,
-        },
-      },
-      {
-        $lookup: {
-          from: "categories",
-          localField: "categoryId",
-          foreignField: "_id",
-          as: "category",
-        },
-      },
-      {
-        $addFields: {
-          category: {
-            $first: "$category",
-          },
-        },
-      },
-    ]);
-    res.json(searchResults);
+    const categories = await Category.find();
+    const searchResults = await Product.find({ $text: { $search: query } });
+    res.json(
+      searchResults.map((product) => {
+        const category = categories.find((c) => c.id == product.categoryId);
+        return {
+          product,
+          category,
+        };
+      })
+    );
 
     // For custom search...
     // const allProducts = await Product.aggregate
