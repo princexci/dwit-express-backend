@@ -11,7 +11,29 @@ const upload = require("./middlewares/upload");
 router.get("/search/:query", async (req, res) => {
   const { query } = req.params;
   try {
-    const searchResults = await Product.find({ $text: { $search: query } });
+    // const searchResults = await Product.find({ $text: { $search: query } });
+    const searchResults = await Product.aggregate([
+      {
+        $text: {
+          $search: query,
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryId",
+          foreignField: "_id",
+          as: "category",
+        },
+      },
+      {
+        $addFields: {
+          category: {
+            $first: "$category",
+          },
+        },
+      },
+    ]);
     res.json(searchResults);
 
     // For custom search...
